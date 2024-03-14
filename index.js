@@ -54,7 +54,8 @@ app.get("/pay", (req, res) => {
         .request(options)
         .then(function (response) {
             console.log(response.data);
-            res.send(response.data)
+            const url = response.data.data.instrumentResponse.redirectInfo.url;
+            res.send({ url })
         })
         .catch(function (error) {
             console.error(error);

@@ -14,17 +14,20 @@ app.get('/', (req, res) => {
     res.send('Phonepe app is working')
 })
 
+
 app.get("/pay", (req, res) => {
     const payEndpoint = "/pg/v1/pay";
     const merchantTransactionId = uniqid();
     const userId = 123;
+
+    const redirectUrl = `https://localhost:3000/redirect-url/${merchantTransactionId}`;
 
     const payload = {
         "merchantId": MERCHANT_ID,
         "merchantTransactionId": "MT7850590068188104",
         "merchantUserId": userId,
         "amount": 10000,
-        "redirectUrl": `https://localhost:3000/redirect-url/${merchantTransactionId}`,
+        "redirectUrl": redirectUrl,
         "redirectMode": "REDIRECT",
         "mobileNumber": "9999999999",
         "paymentInstrument": {
@@ -61,7 +64,18 @@ app.get("/pay", (req, res) => {
         .catch(function (error) {
             console.error(error);
         });
-})
+});
+app.get("/redirect-url/:merchantTransactionId", (req, res) => {
+    const { merchantTransactionId } = req.params;
+    console.log('merchantTransactionId', merchantTransactionId)
+    if (merchantTransactionId) {
+        res.send({ merchantTransactionId })
+    } else {
+        res.send({ error: 'Error' })
+    }
+});
+
+
 app.listen(port, () => {
     console.log(`App started listening on port ${port}`)
 })

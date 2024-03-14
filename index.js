@@ -69,13 +69,32 @@ app.get("/redirect-url/:merchantTransactionId", (req, res) => {
     const { merchantTransactionId } = req.params;
     console.log('merchantTransactionId', merchantTransactionId)
     if (merchantTransactionId) {
-        res.send({ merchantTransactionId })
+        //SHA256(“/pg/v1/status/{merchantId}/{merchantTransactionId}” + saltKey) + “###” + saltIndex
+        const xVerify = sha256(`/pg/v1/status/${MERCHANT_ID}/${merchantTransactionId}` + SALT_KEY) + "###" + SALT_INDEX;
+        const options = {
+            method: 'get',
+            url: `${PHONE_PE_HOST_URL}/pg/v1/status/${MERCHANT_ID}/${merchantTransactionId}`,
+            headers: {
+                accept: 'application/json',
+                "Content-Type": "application/json",
+                "X-MERCHANT-ID": merchantTransactionId,
+                "X-VERIFY": xVerify
+            },
+
+        };
+        axios
+            .request(options)
+            .then(function (response) {
+                console.log(response.data);
+                res.send(response.data)
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
     } else {
         res.send({ error: 'Error' })
     }
 });
-
-
 app.listen(port, () => {
     console.log(`App started listening on port ${port}`)
 })

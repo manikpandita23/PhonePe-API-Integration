@@ -34,7 +34,6 @@ app.get("/pay", (req, res) => {
             "type": "PAY_PAGE"
         }
     }
-
     // SHA256(base64 encoded payload + “/pg/v1/pay” +salt key) + ### + salt index
     const bufferObj = Buffer.from(JSON.stringify(payload), "utf8");
     const base64EncodePayload = bufferObj.toString("base64");

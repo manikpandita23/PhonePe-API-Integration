@@ -6,7 +6,7 @@ const uniqid = require('uniqid');
 const sha256 = require("sha256");
 
 //Testing credentials provided by PhonePe(refer PhonePe API docs in the browser)
- 
+
 const PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox";
 const MERCHANT_ID = 'PGTESTPAYUAT';
 const SALT_INDEX = 1;
@@ -35,7 +35,6 @@ app.get("/pay", (req, res) => {
             "type": "PAY_PAGE"
         }
     }
-    // SHA256(base64 encoded payload + “/pg/v1/pay” +salt key) + ### + salt index
     const bufferObj = Buffer.from(JSON.stringify(payload), "utf8");
     const base64EncodePayload = bufferObj.toString("base64");
     const xVerify = sha256(base64EncodePayload + payEndpoint + SALT_KEY) + "###" + SALT_INDEX

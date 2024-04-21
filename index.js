@@ -68,7 +68,7 @@ app.get("/redirect-url/:merchantTransactionId", (req, res) => {
     const { merchantTransactionId } = req.params;
     console.log('merchantTransactionId', merchantTransactionId)
     if (merchantTransactionId) {
-        //SHA256(“/pg/v1/status/{merchantId}/{merchantTransactionId}” + saltKey) + “###” + saltIndex
+        //SHA256(“/pg/v1/status/{merchantId}/{merchantTransactionId}” + saltKey) + “###” + saltIndex : validate
         const xVerify = sha256(`/pg/v1/status/${MERCHANT_ID}/${merchantTransactionId}` + SALT_KEY) + "###" + SALT_INDEX;
         const options = {
             method: 'get',
